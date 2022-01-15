@@ -1,2 +1,8 @@
 docker build -t phpmessages .
 docker run -d -p 80:80 --name phpmessages_container phpmessages
+#criar volume anonimo na execução do container
+docker run -d -p 80:80 --name phpmessages_container --rm -v /data  phpmessages
+#criar volume nomeado
+docker run -d -p 80:80 --name phpmessages_container -v phpvolume:/var/www/html/messages phpmessages
+#bind mount
+docker run -d -p 80:80 --name phpmessages_container -v /home/adriano/development/kubernetes/volumes/messages:/var/www/html/messages --rm phpmessages
