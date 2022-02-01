@@ -1,0 +1,45 @@
+1. Criação da aplicação
+2. Criação do Dockerfile
+FROM python:3
+
+RUN apt-get update -y && \
+    apt-get install -y python3-pip python-dev
+
+WORKDIR /app
+
+RUN pip install Flask
+
+COPY . .
+
+EXPOSE 5000
+
+CMD [ "python", "./app.py" ]
+
+3. Build da imagem
+docker build -t adrianohenriquess/flask-kubernetes-projeto .
+4. Push da imagem para o docker hub. É necessário estar logado no terminal
+docker push adrianohenriquess/flask-kubernetes-projeto
+5. Criar o deployment
+kubectl create deployment flask-deployment --image=docker.io/adrianohenriquess/flask-kubernetes-projeto
+6. Expor o deployments com os pods com um service
+kubectl expose deployment flask-deployment --type=LoadBalancer --port=5000
+7. mostrar o ip onde o service está exposto
+minikube service flask-deployment
+
+8. Aumentar o numero de replicas
+kubectl scale deployment/flask-deployment --replicas=3
+9. Atualizar a imagem do deployment
+-Alterar algum arquivo da aplicação
+ nano templates/index.html 
+-Build
+ docker build -t adrianohenriquess/flask-kubernetes-projeto:2 .
+-Push da nova tag
+ docker push adrianohenriquess/flask-kubernetes-projeto:2
+-substituição da imagem no deployment
+kubectl set image deployment/flask-deployment flask-kubernetes-projeto=docker.io/adrianohenriquess/flask-kubernetes-projeto:2
+
+kubectl get pods
+para ver os pods sendo atualizados
+kubectl get deployments 
+para ver os deployments
+
