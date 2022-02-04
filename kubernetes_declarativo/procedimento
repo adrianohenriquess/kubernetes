@@ -1,0 +1,10 @@
+gerar uma nova imagem da versão:
+docker build -t adrianohenriquess/flask-kubernetes-projeto:3 .
+docker push adrianohenriquess/flask-kubernetes-projeto:3
+kubectl apply -f flask.yaml
+kubectl apply -f flask-service.yaml 
+minikube service flask-service-test
+
+para apagar o deployment e o service:
+kubectl delete -f flask.yaml
+kubectl delete -f flask-service.yaml
